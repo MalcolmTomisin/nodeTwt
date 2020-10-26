@@ -3,8 +3,8 @@ module.exports = {
 	api: {
 		host: process.env.DB_HOST || "localhost",
 		user: process.env.DB_USER || "root",
-		pass: process.env.DB_PASS || "Notheadsuppass2000",
-		db: "test",
+		pass: process.env.DB_PASS || "Dexter54.",
+		db: "testapp",
 		port: 5000,
 	},
 	jwt: {

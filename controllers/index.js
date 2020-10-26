@@ -24,6 +24,9 @@ module.exports = {
 		}
 		const hashedPassword = bcrypt.hashSync(password, salt);
 		formData.password = hashedPassword;
+		let emailArr = email.split("");
+		let BEGIN_CHARACTER = 0;
+		let name = emailArr.slice(BEGIN_CHARACTER, emailArr.findIndex(char => char === "@")).join("");
 
 		User.count({ where: { email: email } })
 			.then((user) => {
@@ -36,6 +39,7 @@ module.exports = {
 							let userDetails = {
 								...formData,
 								emailVerificationToken,
+								name
 							};
 							return User.create(userDetails);
 						})
@@ -75,5 +79,113 @@ module.exports = {
 				}
 			})
 			.catch((err) => next(err));
+	},
+	verifyEmail: (req, res, next) => {
+		let { token, email } = req.body;
+		if (!token)
+			return res
+				.status(200)
+				.json({
+					success: false,
+					status: "Something went wrong, we could not find your token",
+				});
+		if (!email)
+			return res
+				.status(200)
+				.json({
+					success: false,
+					status: "Something went wrong, we could not find your email",
+				});
+
+		User
+			.findOne({ where: { email: email } })
+			.then((user) => {
+				if (!user)
+					return res
+						.status(200)
+						.json({
+							success: false,
+							status: "A user with that email address doesn't exist",
+						});
+				if (user.emailVerificationToken === token) {
+					User
+						.update(
+							{ emailVerified: true, emailVerificationToken: null },
+							{ where: { email: email } }
+						)
+						.then((user) => {
+							if (!user.length)
+								return res
+									.status(500)
+									.json({
+										success: false,
+										status: "Could not update your record at this time",
+									});
+							return res.json({
+								success: true,
+								status: "Email verified successfully",
+							});
+						})
+						.catch((err) => next(err));
+				} else {
+					return res
+						.status(200)
+						.json({
+							success: false,
+							status: "The email verification token is incorrect",
+						});
+				}
+			})
+			.catch((err) => next(err));
+	},
+	signIn: (req, res, next) => {
+		const { email, password } = req.body;
+		if (!email || !password) {
+			return res
+				.status(200)
+				.json({
+					success: false,
+					status:
+            "You have to provide both your username and password to sign in",
+				});
+		}
+		sequelize.sync().then(() => {
+			User.findOne({ where: { email: email } })
+				.then(async data => {
+					if (!data) {
+						res
+							.status(404)
+							.json({
+								success: false,
+								status: "A user with this email does not exist",
+							});
+					} else {
+						let user = data.get();
+						console.log(user);
+						let pass = bcrypt.compareSync(password, user.password);
+						if (pass) {
+							let token = await jwt.sign(
+								{ id: user.id, email: user.email },
+								config.jwt.secret
+							);
+							if (token) {
+								return res.status(200).json({ user: clean(user), token });
+							} else {
+								return res.status(500).json({
+									success: false,
+									status: "Could not generate an auth token",
+								});
+							}
+						} else {
+							res
+								.status(200)
+								.send({
+									success: false,
+									status: "Incorrect email or password!",
+								});
+						}
+					}
+				}).catch(err => next(err));
+		});
 	}
 };
