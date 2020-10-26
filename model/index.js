@@ -10,11 +10,16 @@ const UserModel = (instance, dataType) => {
 			type: dataType.INTEGER,
 			primaryKey: true,
 			allowNull: false,
-			autoIncrement: true
+			autoIncrement: true,
 		},
 		name: dataType.STRING,
 		email: dataType.STRING,
 		password: dataType.STRING,
+		emailVerificationToken: dataType.STRING,
+		emailVerified: {
+			type: dataType.BOOLEAN,
+			defaultValue: false,
+		},
 	});
 };
 

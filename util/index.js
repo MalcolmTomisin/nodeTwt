@@ -51,4 +51,20 @@ module.exports = {
 		}
 		return b.join("");
 	},
+	clean: (data) => {
+		let sensitiveDetails = [
+			"password",
+			"emailVerified",
+			"emailVerificationToken",
+			"passwordRecoveryToken",
+		];
+		if (typeof data == "object") {
+			for (let key in data) {
+				if (sensitiveDetails.includes(key)) {
+					delete data[key];
+				}
+			}
+			return data;
+		}
+	},
 };
