@@ -10,6 +10,7 @@ module.exports = {
 		const formData = req.body;
 		let email = formData.email;
 		let password = formData.password;
+		console.log(req.body);
 		if (!validateEmail(email)) return res.status(200).json({
 			success: false,
 			status: "You have to provide valid email address"
@@ -53,7 +54,7 @@ module.exports = {
 							sendMail(
 								user.email,
 								"Your Email Verification Token",
-								`Hey there. Thank you for signing up. Click on this link or post the link in your browser to verify your email - https://bilbordapp.com?verify=true&email=${user.email}&token=${emailVerificationToken}`,
+								`Hey there. Thank you for signing up. Click on this link or post the link in your browser to verify your email - https://localhost.com?verify=true&email=${user.email}&token=${emailVerificationToken}`,
 								(err, info) => {
 									if (!err && info) {
 										console.log(info);

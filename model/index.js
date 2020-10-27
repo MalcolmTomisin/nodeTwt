@@ -26,7 +26,7 @@ const UserModel = (instance, dataType) => {
 
 
 const TweetModel = (instance, dataType) => {
-	return instance.define("post", {
+	return instance.define("tweet", {
 		id: {
 			type: dataType.INTEGER,
 			primaryKey: true,
@@ -80,8 +80,10 @@ Favourite.belongsTo(Tweet);
 User.hasOne(Favourite);
 Favourite.belongsTo(User);
 
-sequelize.sync({})
-	.then(() => {
-		console.log("Database & tables created..");
-	});
+sequelize.sync({ force: true }).then(() => {
+  console.log("Database & tables created..");
+});
 
+module.exports = {
+	User, Tweet, Comment, Favourite
+};

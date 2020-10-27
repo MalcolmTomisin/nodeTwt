@@ -2,14 +2,16 @@
 const mailer = require("nodemailer");
 require("dotenv").config();
 
-const transporter = mailer.createTransport({
-	service: "gmail",
-	auth: {
-		// eslint-disable-next-line no-undef
-		user: process.env.EMAIL_USER,
-		// eslint-disable-next-line no-undef
-		pass: process.env.EMAIL_PASS,
-	},
+let transporter = mailer.createTransport({
+  host: "smtp.mailtrap.io",
+  port: 25,
+  auth: {
+    user: "8c66f7b5ec1f52",
+    pass: "a976ae22675cc5",
+  },
+  tls: {
+    ciphers: "SSLv3",
+  },
 });
 
 module.exports = {
@@ -23,19 +25,20 @@ module.exports = {
 		}
 		return false;
 	},
-	sendMail: (to, subject, text, callback) => {
+	sendMail: async (to, subject, text, callback) => {
 		transporter.sendMail(
 			{
-				from: "malcolmtomisin@gmail.com",
+				from: "'Fred Foo 👻' <foo@example.com>",
 				to: to,
 				subject: subject,
 				text: text,
 				html: `<html><h3>${text}</h3></html>`,
 			},
-			(err, info) => {
-				callback(err, null);
-				console.log(info.envelope);
-				console.log(info.messageId);
+			(error, info) => {
+				if (error) {
+					return console.log(error);
+				}
+				console.log("Email sent: " + info.response);
 			}
 		);
 	},
