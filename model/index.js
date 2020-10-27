@@ -33,7 +33,7 @@ const TweetModel = (instance, dataType) => {
 			allowNull: false,
 			autoIncrement: true
 		},
-		content: dataType.STRING,
+		content: dataType.TEXT,
 	});
 };
 
@@ -45,7 +45,7 @@ const CommentModel = (instance, dataType) => {
 			allowNull: false,
 			autoIncrement: true
 		},
-		content: dataType.STRING,
+		content: dataType.TEXT,
 	});
 };
 
