@@ -3,15 +3,15 @@ const mailer = require("nodemailer");
 require("dotenv").config();
 
 let transporter = mailer.createTransport({
-  host: "smtp.mailtrap.io",
-  port: 25,
-  auth: {
-    user: "8c66f7b5ec1f52",
-    pass: "a976ae22675cc5",
-  },
-  tls: {
-    ciphers: "SSLv3",
-  },
+	host: "smtp.mailtrap.io",
+	port: 25,
+	auth: {
+		user: "8c66f7b5ec1f52",
+		pass: "a976ae22675cc5",
+	},
+	tls: {
+		ciphers: "SSLv3",
+	},
 });
 
 module.exports = {

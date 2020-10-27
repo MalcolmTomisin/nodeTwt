@@ -81,7 +81,7 @@ User.hasOne(Favourite);
 Favourite.belongsTo(User);
 
 sequelize.sync({ force: true }).then(() => {
-  console.log("Database & tables created..");
+	console.log("Database & tables created..");
 });
 
 module.exports = {
