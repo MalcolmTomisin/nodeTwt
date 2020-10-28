@@ -4,7 +4,7 @@ const { User, Comment } = require("../model");
 module.exports = {
 	create: (req, res, next) => {
 		const { tweetId, content } = req.body;
-		console.log(content, "content");
+		console.log(req.body, "content");
 		if (!content || content === "") {
 			return res.send({ success: false, status: "invalid content field" });
 		}
@@ -21,7 +21,7 @@ module.exports = {
 		
 	},
 	list: (req, res, next) => {
-		const { tweetId } = req.body;
+		let tweetId = req.params.id;
 
 		Comment.findAll({ where: { tweetId }, include: [User] })
 			.then(result => {

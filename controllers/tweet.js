@@ -45,5 +45,35 @@ module.exports = {
 					res.send({ success: false, status: "No results" });
 				}
 			}).catch(next);
+	},
+	like: (req, res, next) => {
+		let { favourite, tweetId } = req.body;
+		if (!tweetId) {
+			res.send({ success: false, status: "Tweet Id not specified" });
+		}
+		Favourite.findOne({ where: { userId: req.userId, tweetId } })
+			.then(result => {
+				if (result) {
+					Favourite.update({ like: favourite }, {
+						where: {
+							userId: req.userId
+						}
+					})
+						.then(updatedRows => {
+							if (updatedRows[0] > 0) {
+								return res.send({ success: true });
+							}
+							return res.send({ success: false, status: "Error updating" });
+						}).catch(next);
+				} else {
+					Favourite.create({ like: favourite, userId: req.userId, tweetId })
+						.then(result => {
+							if (result) {
+								return res.send({ success: true });
+							}
+							return res.send({ success: false });
+						}).catch(next);
+				}
+			}).catch(next);
 	}
 };

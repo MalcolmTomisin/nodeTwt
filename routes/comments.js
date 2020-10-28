@@ -4,7 +4,7 @@ const controller = require("../controllers/comment");
 const { isLoggedIn } = require("../middleware");
 
 router.post("/create", isLoggedIn, controller.create);
-router.get("/list", isLoggedIn, controller.list);
+router.get("/list/:id", isLoggedIn, controller.list);
 
 module.exports = router;
 

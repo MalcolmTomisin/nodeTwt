@@ -57,7 +57,7 @@ const FavouriteModel = (instance, dataType) => {
 			allowNull: false,
 			autoIncrement: true
 		},
-		number: dataType.INTEGER
+		like : dataType.BOOLEAN
 	});
 };
 
@@ -81,7 +81,7 @@ User.hasOne(Favourite);
 Favourite.belongsTo(User);
 
 sequelize.sync({ alter: true }).then(() => {
-  console.log("Database & tables created..");
+	console.log("Database & tables created..");
 });
 
 module.exports = {
