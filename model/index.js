@@ -33,7 +33,7 @@ const TweetModel = (instance, dataType) => {
 			allowNull: false,
 			autoIncrement: true
 		},
-		content: dataType.TEXT,
+		content: dataType.STRING,
 	});
 };
 
@@ -45,7 +45,7 @@ const CommentModel = (instance, dataType) => {
 			allowNull: false,
 			autoIncrement: true
 		},
-		content: dataType.TEXT,
+		content: dataType.STRING,
 	});
 };
 
@@ -80,8 +80,8 @@ Favourite.belongsTo(Tweet);
 User.hasOne(Favourite);
 Favourite.belongsTo(User);
 
-sequelize.sync({ force: true }).then(() => {
-	console.log("Database & tables created..");
+sequelize.sync({ alter: true }).then(() => {
+  console.log("Database & tables created..");
 });
 
 module.exports = {

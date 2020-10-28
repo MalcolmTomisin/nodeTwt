@@ -3,12 +3,19 @@ const { User, Comment } = require("../model");
 
 module.exports = {
 	create: (req, res, next) => {
-		const { tweetId, comment, user } = req.body;
+		const { tweetId, content } = req.body;
+		console.log(content, "content");
+		if (!content || content === "") {
+			return res.send({ success: false, status: "invalid content field" });
+		}
 		
-		Comment.create({ comment, tweetId, userId: user.id })
+		Comment.create({ content, tweetId, userId: req.userId })
 			.then(post => {
 				if (post) {	
-					res.send({ success: true, comment: post });
+					return res.send({ success: true, comment: post });
+				}
+				else {
+					return res.send({ success: false, status: "unable to create" });
 				}
 			}).catch(next);
 		
@@ -19,7 +26,9 @@ module.exports = {
 		Comment.findAll({ where: { tweetId }, include: [User] })
 			.then(result => {
 				if (result) {
-					res.send({ success: true, comments: result });
+					return res.send({ success: true, comments: result });
+				} else {
+					return res.send({ success: false, status: "no comments" });
 				}
 			})
 			.catch(next);
